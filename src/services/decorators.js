@@ -141,14 +141,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return false;
               }
               return scope.ngModel.$valid &&
-                  (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+                  (!scope.ngModel.$pristine || !scope.options || !scope.options.pristine || scope.options.pristine.success !== false || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
             };
 
             scope.hasError = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+              return scope.ngModel.$invalid && (!scope.ngModel.$pristine || !scope.options || !scope.options.pristine || scope.options.pristine.errors !== false);
             };
 
             scope.fieldId = function(prependFormName, omitNumbers) {
