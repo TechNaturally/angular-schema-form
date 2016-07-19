@@ -263,7 +263,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
             'ng-if',
             ngIf ?
             '(' + ngIf +
-            ') || (' + evalExpr + ')'
+            ') && (' + evalExpr + ')'
             : evalExpr
           );
         }
@@ -576,6 +576,20 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                       !(scope.form && scope.form.schema && !scope.form.schema.required && scope.ngModel.$isEmpty(scope.ngModel.$viewValue));
             };
 
+            scope.fieldId = function(prependFormName, omitNumbers) {
+              if(scope.form.key){
+                var fieldKey = scope.form.key;
+                if(omitNumbers){
+                  fieldKey = fieldKey.filter(function(key){
+                    return !angular.isNumber(key);
+                  });
+                }
+                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
+              }
+              return '';
+            };
+
+
             /**
              * DEPRECATED: use sf-messages instead.
              * Error message handler
@@ -590,19 +604,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 scope.form,
                 scope.options && scope.options.validationMessage
               );
-            };
-
-            scope.fieldId = function(prependFormName, omitNumbers) {
-              if(scope.form.key){
-                var fieldKey = scope.form.key;
-                if(omitNumbers){
-                  fieldKey = fieldKey.filter(function(key){
-                    return !angular.isNumber(key);
-                  });
-                }
-                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
-              }
-              return '';
             };
 
             // Rebind our part of the form to the scope.
@@ -660,7 +661,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
-                        ') || (' + evalExpr +')'
+                        ') && (' + evalExpr +')'
                         : evalExpr
                       );
                     });
@@ -1968,12 +1969,11 @@ angular.module('schemaForm').directive('sfField',
           post: function(scope, element, attrs, Ctrl) {
             var sfSchema = Ctrl[0];
             var formCtrl = Ctrl[1];
-
+            
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
             };
-
 
             scope.listToCheckboxValues = function(list) {
               var values = {};
