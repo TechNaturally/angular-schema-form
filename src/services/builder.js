@@ -121,7 +121,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
             'ng-if',
             ngIf ?
             '(' + ngIf +
-            ') || (' + evalExpr + ')'
+            ') && (' + evalExpr + ')'
             : evalExpr
           );
         }

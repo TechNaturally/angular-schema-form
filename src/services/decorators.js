@@ -237,7 +237,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
-                        ') || (' + evalExpr +')'
+                        ') && (' + evalExpr +')'
                         : evalExpr
                       );
                     });
