@@ -617,7 +617,13 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                 // append the field-id to the htmlClass
                 if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
-                scope.form.htmlClass += (scope.form.htmlClass?' ':'')+scope.fieldId(false, true);
+                var idClass = scope.fieldId(false, true);
+                if(idClass){
+                  var idClassRx = new RegExp('\\b'+idClass+'\\b', 'g');
+                  if(!idClassRx.test(scope.form.htmlClass)){
+                    scope.form.htmlClass += (scope.form.htmlClass?' ':'')+idClass;
+                  }
+                }
 
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
@@ -2115,7 +2121,13 @@ angular.module('schemaForm').directive('sfField',
 
             // append the field-id to the htmlClass
             if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
-            scope.form.htmlClass += (scope.form.htmlClass?' ':'')+scope.fieldId(false, true);
+            var idClass = scope.fieldId(false, true);
+            if(idClass){
+              var idClassRx = new RegExp('\\b'+idClass+'\\b', 'g');
+              if(!idClassRx.test(scope.form.htmlClass)){
+                scope.form.htmlClass += (scope.form.htmlClass?' ':'')+idClass;
+              }
+            }
 
             var form = scope.form;
 
